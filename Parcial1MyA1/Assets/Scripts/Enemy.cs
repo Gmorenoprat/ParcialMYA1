@@ -25,7 +25,8 @@ public class Enemy : MonoBehaviour
     public void GetShot()
     {
         manager.EnemyDead(); //Le digo al manager que mori
-        Destroy(gameObject); //Me destruyo
+        EnemySpawner.Instance.ReturnEnemy(this);
+        //Destroy(gameObject); //Me destruyo
     }
     //Funcion para agarrar una bullet del pool
     public static void TurnOn(Enemy e)

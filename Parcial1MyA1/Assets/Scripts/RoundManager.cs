@@ -55,7 +55,10 @@ public class RoundManager : MonoBehaviour
         {
             int posToSpawn = Random.Range(0, _spawnPositions.Length); //Posicion en la que va a spawnear
 
-            var e = Instantiate(enemyPrefab, _spawnPositions[posToSpawn].position, Quaternion.identity);  //Instancio enemy
+            Enemy e = EnemySpawner.Instance.pool.GetObject();
+            e.transform.position = _spawnPositions[posToSpawn].position;
+            e.transform.rotation = transform.rotation;
+            // var e = Instantiate(enemyPrefab, _spawnPositions[posToSpawn].position, Quaternion.identity);  //Instancio enemy
             e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
             e.target = _target; //Le paso el target
 

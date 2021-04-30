@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   timeToDie: 3
+  owner: {fileID: 0}
 --- !u!50 &4729521298828617831
 Rigidbody2D:
   serializedVersion: 4

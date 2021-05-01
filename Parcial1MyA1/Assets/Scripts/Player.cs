@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, IObserver
     bool _canShoot;
     Coroutine _shootCDCor;
 
-    enum TipoDisparo{
+    public enum TipoDisparo{
         normal = 0,
         sinuous = 1,
     }
@@ -44,17 +44,18 @@ public class Player : MonoBehaviour, IObserver
         //Disparo
         if (Input.GetMouseButtonDown(0))
         {
-            if (_canShoot) Shoot(TipoDisparo.normal);
+            if (_canShoot) Shoot("normal");
         }
         if (Input.GetMouseButtonDown(1))
         {
-            if (_canShoot) Shoot(TipoDisparo.sinuous);
+            if (_canShoot) Shoot("sinuous");
         }
     }
 
-    void Shoot(TipoDisparo tipo)
+    void Shoot(string tipo)
     {
         Bullet b = BulletSpawner.Instance.pool.GetObject();
+        b.SetType(tipo);
         //if(tipo == TipoDisparo.normal)
         //if(tipo == TipoDisparo.sinuous)
 

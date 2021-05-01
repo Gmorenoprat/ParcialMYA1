@@ -12,6 +12,18 @@ public class Enemy : MonoBehaviour , IObservable
     List<IObserver> _allObserver = new List<IObserver>();
 
 
+    public Enemy setTarget(Transform target)
+    {
+        this.target = target;
+        return this;
+    }
+
+    public Enemy setMananger(RoundManager manager)
+    {
+        this.manager = manager;
+        return this;
+    }
+
 
     // Update is called once per frame
     void Update()

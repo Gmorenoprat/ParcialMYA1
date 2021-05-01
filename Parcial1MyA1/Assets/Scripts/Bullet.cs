@@ -17,6 +17,14 @@ public class Bullet : MonoBehaviour, IObservable
     IAdvance myCurrentStrategySinuoso;
 
 
+    public Bullet SetType(string tipo)
+    {
+        if(tipo == "normal") myCurrentStrategy = myCurrentStrategyNormal;
+        if (tipo == "sinuous") myCurrentStrategy = myCurrentStrategySinuoso;
+        return this;
+    }
+
+
     void Awake()
     {
         myCurrentStrategyNormal = new NormalAdvance(speed,transform);
@@ -24,11 +32,6 @@ public class Bullet : MonoBehaviour, IObservable
 
     }
 
-
-    void Start()
-    {
-        myCurrentStrategy = myCurrentStrategySinuoso;
-    }
     // Update is called once per frame
     void Update()
     {

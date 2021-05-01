@@ -61,8 +61,10 @@ public class RoundManager : MonoBehaviour, IObserver
             e.transform.position = _spawnPositions[posToSpawn].position;
             e.transform.rotation = transform.rotation;
             // var e = Instantiate(enemyPrefab, _spawnPositions[posToSpawn].position, Quaternion.identity);  //Instancio enemy
-            e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
-            e.target = _target; //Le paso el target
+            e.setTarget(_target);
+            e.setMananger(this);
+            //e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
+            //e.target = _target; //Le paso el target
 
             e.Subscribe(this);
 

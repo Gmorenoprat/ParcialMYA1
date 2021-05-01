@@ -15,7 +15,18 @@ public class RoundManager : MonoBehaviour, IObserver
     int _totalEnemies;
 
     int _actualRound;
-    
+
+    LookUpTable<int, int> _enemigosASpawnearPrimerasDiezRondas;
+
+    void Awake()
+    {
+        _enemigosASpawnearPrimerasDiezRondas = new LookUpTable<int, int>(CalculateEnemiesToSpawn);
+        for(int i = 1; i<11; i++) {
+            _enemigosASpawnearPrimerasDiezRondas.ReturnValue(i);
+        }
+
+    }
+
     void Start()
     {
         EventManager.SubscribeToEvent(EventManager.EventsType.Event_EnemyDestroyed, EnemyDead);

@@ -32,7 +32,6 @@ public class EventManager
         }
     }
 
-
     public static void TriggerEvent(EventsType eventType, params object[] parameters)
     {
         if (_events == null) 

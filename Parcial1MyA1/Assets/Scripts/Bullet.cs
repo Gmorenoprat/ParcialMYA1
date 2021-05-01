@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour, IObservable
     public Player owner;
 
     //Lista donde guardo todos los IObservers 
-    List<IObserver> _allObserver = new List<IObserver>();
+    List<IObserver> _allObserver;
 
     //Strategy
     IAdvance myCurrentStrategy;
@@ -29,6 +29,8 @@ public class Bullet : MonoBehaviour, IObservable
     {
         myCurrentStrategyNormal = new NormalAdvance(speed,transform);
         myCurrentStrategySinuoso = new SinuousAdvance(speed,transform);
+
+        _allObserver = new List<IObserver>();
 
     }
 
@@ -100,7 +102,6 @@ public class Bullet : MonoBehaviour, IObservable
 
     public void NotifyToObservers(string action)
     {
-        
         for (int i = _allObserver.Count - 1; i >= 0; i--)
         {
             _allObserver[i].Notify(action);

@@ -16,6 +16,7 @@ public class RoundManager : MonoBehaviour, IObserver
 
     int _actualRound;
 
+    //nombre de variable innecesariamente extenso 
     LookUpTable<int, int> _enemigosASpawnearPrimerasDiezRondas;
 
     void Awake()

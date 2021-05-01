@@ -46,6 +46,7 @@ public class Player : MonoBehaviour, IObserver
         {
             if (_canShoot) Shoot("normal");
         }
+        //Disparo Sinuoso
         if (Input.GetMouseButtonDown(1))
         {
             if (_canShoot) Shoot("sinuous");
@@ -56,9 +57,6 @@ public class Player : MonoBehaviour, IObserver
     {
         Bullet b = BulletSpawner.Instance.pool.GetObject();
         b.SetType(tipo);
-        //if(tipo == TipoDisparo.normal)
-        //if(tipo == TipoDisparo.sinuous)
-
         b.transform.position = pointToSpawn.position;
         b.transform.rotation = transform.rotation;
         //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala
@@ -72,7 +70,7 @@ public class Player : MonoBehaviour, IObserver
     //Funcion para cuando la bala toca un enemigo
     public void TargetHit()
     {
-        if (_shootCDCor != null)
+        if (_shootCDCor != null && this != null)
         {
             StopCoroutine(_shootCDCor);
         }
@@ -85,6 +83,7 @@ public class Player : MonoBehaviour, IObserver
     //Setea cambios de la barra de CD del UI
     void CompletedFireCooldown()
     {
+        if (cooldownBar == null) return;
         cooldownBar.color = Color.green;
         cooldownBar.fillAmount = 1;
     }

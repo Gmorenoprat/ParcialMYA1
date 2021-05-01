@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour , IObserver
 {
     public float speed;
     public float shootCooldown;
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
         //Disparo
         if (Input.GetMouseButtonDown(0))
         {
-            if (_canShoot) Shoot();
+            Notify("ataque");
         }
     }
 
@@ -99,6 +99,14 @@ public class Player : MonoBehaviour
         if (collision.GetComponent<Enemy>())
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        }
+    }
+
+    public void Notify(string action)
+    {
+        if(action=="ataque")
+        {
+            Shoot();
         }
     }
 }

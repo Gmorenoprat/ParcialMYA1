@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, IObservable
 {
     public float speed;
     public float timeToDie;
     public Player owner;
+
+    //Lista donde guardo todos los IObservers suscritos a mi
+    List<IObserver> _allObserver = new List<IObserver>();
 
     // Update is called once per frame
     void Update()
@@ -48,6 +51,30 @@ public class Bullet : MonoBehaviour
     public static void TurnOff(Bullet b)
     {
         b.gameObject.SetActive(false); //La deshabilito
+    }
+
+    public void Subscribe(IObserver obs)
+    {
+        if (!_allObserver.Contains(obs))
+        {
+            _allObserver.Add(obs);
+        }
+    }
+
+    public void Unsubscribe(IObserver obs)
+    {
+        if (_allObserver.Contains(obs))
+        {
+            _allObserver.Remove(obs);
+        }
+    }
+
+    public void NotifyToObservers(string action)
+    {
+        for (int i = _allObserver.Count - 1; i >= 0; i--)
+        {
+            _allObserver[i].Notify(action);
+        }
     }
 }
 

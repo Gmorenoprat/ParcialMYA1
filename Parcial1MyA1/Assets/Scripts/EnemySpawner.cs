@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour
 
     public ObjectPool<Enemy> pool;
 
-    void Start()
+    void Awake()
     {
         _instance = this;
 

@@ -8,8 +8,9 @@ public class Bullet : MonoBehaviour, IObservable
     public float timeToDie;
     public Player owner;
 
-    //Lista donde guardo todos los IObservers suscritos a mi
+    //Lista donde guardo todos los IObservers 
     List<IObserver> _allObserver = new List<IObserver>();
+
 
     // Update is called once per frame
     void Update()
@@ -33,7 +34,9 @@ public class Bullet : MonoBehaviour, IObservable
 
         if (en)
         {
-            owner.TargetHit(); //Le digo al player que le pegue
+
+            NotifyToObservers("BulletHit");
+            //owner.TargetHit(); //Le digo al player que le pegue
             en.GetShot(); //Le hago damage al enemigo
 
             BulletSpawner.Instance.ReturnBullet(this); //Devuelvo al pool
@@ -50,8 +53,12 @@ public class Bullet : MonoBehaviour, IObservable
     //Funcion para devolver una bullet al pool
     public static void TurnOff(Bullet b)
     {
+        b.Unsubscribe(b.owner);
         b.gameObject.SetActive(false); //La deshabilito
+
     }
+
+    #region Interfaz IObservable
 
     public void Subscribe(IObserver obs)
     {
@@ -71,10 +78,13 @@ public class Bullet : MonoBehaviour, IObservable
 
     public void NotifyToObservers(string action)
     {
+        
         for (int i = _allObserver.Count - 1; i >= 0; i--)
         {
             _allObserver[i].Notify(action);
         }
     }
+
+    #endregion
 }
 

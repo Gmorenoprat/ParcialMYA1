@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour , IObservable
 {
     public float speed;
     public Transform target;
 
     public RoundManager manager;
+
+    List<IObserver> _allObserver = new List<IObserver>();
+
 
 
     // Update is called once per frame
@@ -24,7 +27,8 @@ public class Enemy : MonoBehaviour
 
     public void GetShot()
     {
-        manager.EnemyDead(); //Le digo al manager que mori
+        NotifyToObservers("EnemyDestroyed");
+        //manager.EnemyDead(); //Le digo al manager que mori
         EnemySpawner.Instance.ReturnEnemy(this);
         //Destroy(gameObject); //Me destruyo
     }
@@ -39,4 +43,30 @@ public class Enemy : MonoBehaviour
     {
         e.gameObject.SetActive(false); //La deshabilito
     }
+
+    #region IOBServable
+    public void Subscribe(IObserver obs)
+    {
+        if (!_allObserver.Contains(obs))
+        {
+            _allObserver.Add(obs);
+        }
+    }
+
+    public void Unsubscribe(IObserver obs)
+    {
+        if (_allObserver.Contains(obs))
+        {
+            _allObserver.Remove(obs);
+        }
+    }
+
+    public void NotifyToObservers(string action)
+    {
+        for (int i = _allObserver.Count - 1; i >= 0; i--)
+        {
+            _allObserver[i].Notify(action);
+        }
+    }
+    #endregion
 }

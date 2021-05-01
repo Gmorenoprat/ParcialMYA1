@@ -22,6 +22,8 @@ public class Player : MonoBehaviour , IObserver
         _myCamera = Camera.main;
         _canShoot = true;
         CompletedFireCooldown();
+
+        EventManager.SubscribeToEvent(EventManager.EventsType.Event_BulletHit, TargetHit);
     }
 
     // Update is called once per frame
@@ -37,7 +39,7 @@ public class Player : MonoBehaviour , IObserver
         //Disparo
         if (Input.GetMouseButtonDown(0))
         {
-            Notify("ataque");
+            if (_canShoot) Shoot();
         }
     }
 
@@ -49,6 +51,7 @@ public class Player : MonoBehaviour , IObserver
         //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala
         b.timeToDie = shootCooldown;  //Le paso el cooldown como tiempo de vida
         b.owner = this;  //Le paso que el owner es este script para que cuando mate un enemigo me avise
+        b.Subscribe(this);
 
         _shootCDCor = StartCoroutine(ShootCooldown());  //Corrutina del cooldown para volver a disparar
     }
@@ -104,9 +107,10 @@ public class Player : MonoBehaviour , IObserver
 
     public void Notify(string action)
     {
-        if(action=="ataque")
+        if(action=="BulletHit")
         {
-            Shoot();
+            EventManager.TriggerEvent(EventManager.EventsType.Event_BulletHit);
+
         }
     }
 }

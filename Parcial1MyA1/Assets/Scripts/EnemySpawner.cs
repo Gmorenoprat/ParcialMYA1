@@ -22,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
         _instance = this;
 
         pool = new ObjectPool<Enemy>(EnemyFactory, Enemy.TurnOn, Enemy.TurnOff, enemyStock, true);
+
     }
 
     public Enemy EnemyFactory()
@@ -33,4 +34,6 @@ public class EnemySpawner : MonoBehaviour
     {
         pool.ReturnObject(b);
     }
+
+
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoundManager : MonoBehaviour
+public class RoundManager : MonoBehaviour, IObserver
 {
     public Enemy enemyPrefab; 
 
@@ -18,6 +18,8 @@ public class RoundManager : MonoBehaviour
     
     void Start()
     {
+        EventManager.SubscribeToEvent(EventManager.EventsType.Event_EnemyDestroyed, EnemyDead);
+
         _target = FindObjectOfType<Player>().transform; //target que le voy a asignar al enemigo
 
         _spawnPositions = spawnPoints.GetComponentsInChildren<Transform>(); //Los puntos de spawn para los enemigos
@@ -62,10 +64,20 @@ public class RoundManager : MonoBehaviour
             e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
             e.target = _target; //Le paso el target
 
+            e.Subscribe(this);
+
             enemiesCont++;
 
             yield return new WaitForSeconds(0.5f);
         }
         
+    }
+
+    public void Notify(string action)
+    {
+        if (action == "EnemyDestroyed")
+        {
+            EnemyDead();
+        }
     }
 }

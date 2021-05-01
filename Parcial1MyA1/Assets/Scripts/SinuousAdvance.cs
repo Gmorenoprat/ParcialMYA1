@@ -5,12 +5,12 @@ using UnityEngine;
 public class SinuousAdvance : IAdvance
 {
     float _speed = 3;
-    float _frecuencia = 1f;
-    float _onda = 1f;
+    float _frecuencia = 9f;
+    float _magnitud = 0.04f;
     Transform _xf;
 
-    Vector3 pos;
-    Vector3 axis;
+   
+    
 
     public SinuousAdvance(float speed, Transform transform)
     {
@@ -20,13 +20,10 @@ public class SinuousAdvance : IAdvance
 
     public void Advance()
     {
-        pos = _xf.right * _speed * Time.deltaTime;
-        axis = _xf.up;
-        _xf.position += pos + new Vector3(0, Mathf.Sin(_xf.transform.position.x * _frecuencia * 2 * Mathf.PI) * _onda, 0);
-
-
-     
-
+        var pos = _xf.position;
+        pos += _xf.right * Time.deltaTime * _speed;
+        _xf.position = pos + _xf.up * Mathf.Sin(Time.time * _frecuencia) * _magnitud;
+      
     }
 }
 

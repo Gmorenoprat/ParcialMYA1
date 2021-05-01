@@ -11,12 +11,31 @@ public class Bullet : MonoBehaviour, IObservable
     //Lista donde guardo todos los IObservers 
     List<IObserver> _allObserver = new List<IObserver>();
 
+    //Strategy
+    IAdvance myCurrentStrategy;
+    IAdvance myCurrentStrategyNormal;
+    IAdvance myCurrentStrategySinuoso;
 
+
+    void Awake()
+    {
+        myCurrentStrategyNormal = new NormalAdvance(speed,transform);
+        myCurrentStrategySinuoso = new SinuousAdvance(speed,transform);
+
+    }
+
+
+    void Start()
+    {
+        myCurrentStrategy = myCurrentStrategySinuoso;
+    }
     // Update is called once per frame
     void Update()
     {
         //Movimiento
-        transform.position += transform.right * speed * Time.deltaTime;
+        if (myCurrentStrategy != null)
+            myCurrentStrategy.Advance();
+        //transform.position += transform.right * speed * Time.deltaTime;
 
         //Lifetime
         timeToDie -= Time.deltaTime;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour , IObserver
+public class Player : MonoBehaviour, IObserver
 {
     public float speed;
     public float shootCooldown;
@@ -14,6 +14,11 @@ public class Player : MonoBehaviour , IObserver
     Camera _myCamera;
     bool _canShoot;
     Coroutine _shootCDCor;
+
+    enum TipoDisparo{
+        normal = 0,
+        sinuous = 1,
+    }
 
 
     // Start is called before the first frame update
@@ -39,13 +44,20 @@ public class Player : MonoBehaviour , IObserver
         //Disparo
         if (Input.GetMouseButtonDown(0))
         {
-            if (_canShoot) Shoot();
+            if (_canShoot) Shoot(TipoDisparo.normal);
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (_canShoot) Shoot(TipoDisparo.sinuous);
         }
     }
 
-    void Shoot()
+    void Shoot(TipoDisparo tipo)
     {
         Bullet b = BulletSpawner.Instance.pool.GetObject();
+        //if(tipo == TipoDisparo.normal)
+        //if(tipo == TipoDisparo.sinuous)
+
         b.transform.position = pointToSpawn.position;
         b.transform.rotation = transform.rotation;
         //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala

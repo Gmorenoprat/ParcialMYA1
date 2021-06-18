@@ -62,6 +62,7 @@ public class Player : MonoBehaviour, IObserver
         //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala
         b.timeToDie = shootCooldown;  //Le paso el cooldown como tiempo de vida
         b.owner = this;  //Le paso que el owner es este script para que cuando mate un enemigo me avise
+       
         b.Subscribe(this);
 
         _shootCDCor = StartCoroutine(ShootCooldown());  //Corrutina del cooldown para volver a disparar
@@ -121,7 +122,8 @@ public class Player : MonoBehaviour, IObserver
     {
         if(action=="BulletHit")
         {
-            EventManager.TriggerEvent(EventManager.EventsType.Event_BulletHit);
+            TargetHit();
+            //EventManager.TriggerEvent(EventManager.EventsType.Event_BulletHit);
 
         }
     }

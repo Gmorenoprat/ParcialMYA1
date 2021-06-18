@@ -59,7 +59,7 @@ public class RoundManager : MonoBehaviour, IObserver
     {
         _actualRound++; //Nueva ronda
 
-        _totalEnemies = CalculateEnemiesToSpawn(_actualRound); //Total de enemigos a spawnear
+        _totalEnemies = _enemigosASpawnearPrimerasDiezRondas.ReturnValue(_actualRound); ;// CalculateEnemiesToSpawn(_actualRound); //Total de enemigos a spawnear
 
         int enemiesToSpawn = _totalEnemies;
 

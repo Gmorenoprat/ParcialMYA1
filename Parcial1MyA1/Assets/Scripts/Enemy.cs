@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour , IObservable
 {
-    public float speed;
+    //public float speed;
     public Transform target;
 
     public RoundManager manager;
@@ -34,7 +34,9 @@ public class Enemy : MonoBehaviour , IObservable
         Vector3 dir = target.position - transform.position;
         dir.z = target.position.z;
         dir.Normalize();
-        transform.position += dir * speed * Time.deltaTime;
+
+        //FLYWEIGHT
+        transform.position += dir * FlyWeightPointer.Asteroid.speed * Time.deltaTime;
     }
 
     public void GetShot()
@@ -44,6 +46,7 @@ public class Enemy : MonoBehaviour , IObservable
         EnemySpawner.Instance.ReturnEnemy(this);
         //Destroy(gameObject); //Me destruyo
     }
+    #region POOL
     //Funcion para agarrar una bullet del pool
     public static void TurnOn(Enemy e)
     {
@@ -55,6 +58,8 @@ public class Enemy : MonoBehaviour , IObservable
     {
         e.gameObject.SetActive(false); //La deshabilito
     }
+
+    #endregion
 
     #region IOBServable
     public void Subscribe(IObserver obs)

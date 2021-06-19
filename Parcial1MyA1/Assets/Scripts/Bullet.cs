@@ -4,32 +4,41 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour, IObservable
 {
-    public float speed;
-    public float timeToDie;
+    private float _speed;
+    private float _timeToDie;
     public Player owner;
+
+
+    private IAdvance _movementType;
 
     //Lista donde guardo todos los IObservers 
     List<IObserver> _allObserver;
 
-    //Strategy
-    IAdvance myCurrentStrategy;
-    IAdvance myCurrentStrategyNormal;
-    IAdvance myCurrentStrategySinuoso;
 
-
-    public Bullet SetType(string tipo)
+    public Bullet SetType(IAdvance advance)
     {
-        if(tipo == "normal") myCurrentStrategy = myCurrentStrategyNormal;
-        if (tipo == "sinuous") myCurrentStrategy = myCurrentStrategySinuoso;
+        _movementType = advance;
         return this;
     }
 
+    public Bullet SetSpeed(float speed)
+    {
+        _speed = speed;
+        return this;
+    }
+    public Bullet SetTimeToDie(float timeToDie)
+    {
+        _timeToDie = timeToDie;
+        return this;
+    }
+    public Bullet SetOwner(Player owner)
+    {
+        this.owner = owner;
+        return this;
+    }
 
     void Awake()
     {
-        myCurrentStrategyNormal = new NormalAdvance(speed,transform);
-        myCurrentStrategySinuoso = new SinuousAdvance(speed,transform);
-
         _allObserver = new List<IObserver>();
 
     }
@@ -38,14 +47,14 @@ public class Bullet : MonoBehaviour, IObservable
     void Update()
     {
         //Movimiento
-        if (myCurrentStrategy != null)
-            myCurrentStrategy.Advance();
+        if (_movementType != null)
+            _movementType.Advance();
         //transform.position += transform.right * speed * Time.deltaTime;
 
         //Lifetime
-        timeToDie -= Time.deltaTime;
+        _timeToDie -= Time.deltaTime;
 
-        if (timeToDie<= 0)
+        if (_timeToDie <= 0)
         {
             BulletSpawner.Instance.ReturnBullet(this);
             //Destroy(this.gameObject);
@@ -68,6 +77,8 @@ public class Bullet : MonoBehaviour, IObservable
         }
     }
 
+
+    #region POOL
     //Funcion para agarrar una bullet del pool
     public static void TurnOn(Bullet b)
     {
@@ -81,6 +92,7 @@ public class Bullet : MonoBehaviour, IObservable
         b.gameObject.SetActive(false); //La deshabilito
 
     }
+    #endregion
 
     #region Interfaz IObservable
 

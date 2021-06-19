@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IObserver
 {
     public float speed;
+    public float bulletSpeed = 5f;
     public float shootCooldown;
     public Bullet bulletPrefab;
     public Transform pointToSpawn;
@@ -14,6 +16,15 @@ public class Player : MonoBehaviour, IObserver
     Camera _myCamera;
     bool _canShoot;
     Coroutine _shootCDCor;
+
+
+
+
+    //Strategy
+   // IAdvance myCurrentStrategy;
+
+
+    public IAdvance advance;
 
     public enum TipoDisparo{
         normal = 0,
@@ -44,24 +55,31 @@ public class Player : MonoBehaviour, IObserver
         //Disparo
         if (Input.GetMouseButtonDown(0))
         {
-            if (_canShoot) Shoot("normal");
+
+            if (_canShoot) Shoot(TipoDisparo.normal);
         }
         //Disparo Sinuoso
         if (Input.GetMouseButtonDown(1))
         {
-            if (_canShoot) Shoot("sinuous");
+            if (_canShoot) Shoot(TipoDisparo.sinuous);
         }
     }
 
-    void Shoot(string tipo)
+    void Shoot(TipoDisparo tipoDisparo)
     {
-        Bullet b = BulletSpawner.Instance.pool.GetObject();
-        b.SetType(tipo);
+        //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala
+
+        //b.timeToDie = shootCooldown;  //Le paso el cooldown como tiempo de vida
+        //b.owner = this;  //Le paso que el owner es este script para que cuando mate un enemigo me avise
+        
+        Bullet b = BulletSpawner.Instance.pool.GetObject().SetSpeed(bulletSpeed).SetTimeToDie(shootCooldown).SetOwner(this);
         b.transform.position = pointToSpawn.position;
         b.transform.rotation = transform.rotation;
-        //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala
-        b.timeToDie = shootCooldown;  //Le paso el cooldown como tiempo de vida
-        b.owner = this;  //Le paso que el owner es este script para que cuando mate un enemigo me avise
+        
+        //Strategy?
+        if(tipoDisparo == TipoDisparo.normal) advance = new NormalAdvance(bulletSpeed, b.transform);
+        if (tipoDisparo == TipoDisparo.sinuous) advance = new SinuousAdvance(bulletSpeed, b.transform);
+        b.SetType(advance);
        
         b.Subscribe(this);
 

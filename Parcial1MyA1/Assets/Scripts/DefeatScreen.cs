@@ -27,7 +27,7 @@ public class DefeatScreen : MonoBehaviour
             yield return null;
         }
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
     
 }

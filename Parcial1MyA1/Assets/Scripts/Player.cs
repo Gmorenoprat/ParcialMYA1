@@ -104,7 +104,7 @@ public class Player : MonoBehaviour, IObserver
     {
         if (collision.GetComponent<Enemy>())
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
     }
 

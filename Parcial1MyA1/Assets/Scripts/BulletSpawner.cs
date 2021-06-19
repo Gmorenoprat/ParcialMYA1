@@ -26,7 +26,11 @@ public class BulletSpawner : MonoBehaviour
 
     public Bullet BulletFactory()
     {
-        return Instantiate(bulletPrefab);
+       
+            Bullet b = Instantiate(bulletPrefab);
+            b.transform.parent = this.transform;
+            return b;
+        
     }
 
     public void ReturnBullet(Bullet b)

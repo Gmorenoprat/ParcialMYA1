@@ -27,7 +27,9 @@ public class EnemySpawner : MonoBehaviour
 
     public Enemy EnemyFactory()
     {
-        return Instantiate(enemyPrefab);
+        Enemy e = Instantiate(enemyPrefab);
+        e.transform.parent = this.transform;
+        return e;
     }
 
     public void ReturnEnemy(Enemy b)

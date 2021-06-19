@@ -10,6 +10,7 @@ public class ScreenManag : MonoBehaviour
 
     static public ScreenManag Instance;
 
+
     private void Awake()
     {
         Instance = this;
@@ -29,7 +30,7 @@ public class ScreenManag : MonoBehaviour
         }
     }
 
-    public void Push(IScreen screen)
+    public bool Push(IScreen screen)
     {
         if (_stack.Count > 0)
         {
@@ -39,6 +40,8 @@ public class ScreenManag : MonoBehaviour
         _stack.Push(screen);
 
         screen.Activate();
+
+        return true;
     }
 
     public void Push(string resource)

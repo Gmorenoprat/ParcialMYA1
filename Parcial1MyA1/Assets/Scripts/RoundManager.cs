@@ -19,6 +19,8 @@ public class RoundManager : MonoBehaviour, IObserver
     //nombre de variable innecesariamente extenso 
     LookUpTable<int, int> _enemigosASpawnearPrimerasDiezRondas;
 
+    public System.Func<bool> isPaused;
+
     void Awake()
     {
         _enemigosASpawnearPrimerasDiezRondas = new LookUpTable<int, int>(CalculateEnemiesToSpawn);
@@ -35,9 +37,16 @@ public class RoundManager : MonoBehaviour, IObserver
         _target = FindObjectOfType<Player>().transform; //target que le voy a asignar al enemigo
 
         _spawnPositions = spawnPoints.GetComponentsInChildren<Transform>(); //Los puntos de spawn para los enemigos
-        
+
+        isPaused = boolIsPaused;
+
         StartCoroutine(SpawnEnemies());
+
     }
+     public bool boolIsPaused()
+     {
+        return this.enabled;
+     }
 
 
     public void EnemyDead()
@@ -47,6 +56,7 @@ public class RoundManager : MonoBehaviour, IObserver
         if (_totalEnemies <= 0) //Si no hay mas enemies
         {
             StartCoroutine(SpawnEnemies()); //Nueva wave
+            
         }
     }
 
@@ -58,7 +68,7 @@ public class RoundManager : MonoBehaviour, IObserver
 
     IEnumerator SpawnEnemies()
     {
-
+        
         _actualRound++; //Nueva ronda
 
         _totalEnemies = _enemigosASpawnearPrimerasDiezRondas.ReturnValue(_actualRound); ;// CalculateEnemiesToSpawn(_actualRound); //Total de enemigos a spawnear
@@ -75,6 +85,8 @@ public class RoundManager : MonoBehaviour, IObserver
             
             
             int posToSpawn = Random.Range(0, _spawnPositions.Length); //Posicion en la que va a spawnear
+
+            yield return new WaitUntil(isPaused); //nice workaround
 
             Enemy e = EnemySpawner.Instance.pool.GetObject();
             e.transform.position = _spawnPositions[posToSpawn].position;

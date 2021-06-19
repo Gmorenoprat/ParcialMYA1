@@ -9,21 +9,23 @@ public class Player : MonoBehaviour, IObserver
     public float speed;
     public float bulletSpeed = 5f;
     public float shootCooldown;
+    public bool _canShoot;
     public Bullet bulletPrefab;
     public Transform pointToSpawn;
     public Image cooldownBar;
 
     Camera _myCamera;
-    bool _canShoot;
     Coroutine _shootCDCor;
 
+    PlayerController playerController;
+    PlayerView playerView;
 
+    public AudioSource[] audios;
 
+    public event Func<float, IEnumerator> fireCooldown;// = delegate { };
+    public event Action completedFireCooldown = delegate { };
 
     //Strategy
-   // IAdvance myCurrentStrategy;
-
-
     public IAdvance advance;
 
     public enum TipoDisparo{
@@ -37,35 +39,20 @@ public class Player : MonoBehaviour, IObserver
     {
         _myCamera = Camera.main;
         _canShoot = true;
-        CompletedFireCooldown();
+        completedFireCooldown();
 
         EventManager.SubscribeToEvent(EventManager.EventsType.Event_BulletHit, TargetHit);
+        playerView = new PlayerView(cooldownBar, audios);
+        playerController = new PlayerController(this, _myCamera, playerView);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Movimiento
-        Vector3 lookAtPos = _myCamera.ScreenToWorldPoint(Input.mousePosition);
-        lookAtPos.z = transform.position.z;
-        transform.right = lookAtPos - transform.position;
-
-        transform.position += (_myCamera.transform.right * Input.GetAxisRaw("Horizontal") + _myCamera.transform.up * Input.GetAxisRaw("Vertical")).normalized * speed * Time.deltaTime;
-
-        //Disparo
-        if (Input.GetMouseButtonDown(0))
-        {
-
-            if (_canShoot) Shoot(TipoDisparo.normal);
-        }
-        //Disparo Sinuoso
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (_canShoot) Shoot(TipoDisparo.sinuous);
-        }
+        playerController.OnUpdate();
     }
 
-    void Shoot(TipoDisparo tipoDisparo)
+    public void Shoot(TipoDisparo tipoDisparo)
     {
         //Bullet b = Instantiate(bulletPrefab, pointToSpawn.position, transform.rotation); //Instancio bala
 
@@ -75,10 +62,10 @@ public class Player : MonoBehaviour, IObserver
         Bullet b = BulletSpawner.Instance.pool.GetObject().SetSpeed(bulletSpeed).SetTimeToDie(shootCooldown).SetOwner(this);
         b.transform.position = pointToSpawn.position;
         b.transform.rotation = transform.rotation;
-        
+
         //Strategy?
-        if(tipoDisparo == TipoDisparo.normal) advance = new NormalAdvance(bulletSpeed, b.transform);
-        if (tipoDisparo == TipoDisparo.sinuous) advance = new SinuousAdvance(bulletSpeed, b.transform);
+        if (tipoDisparo == TipoDisparo.normal)  { advance = new NormalAdvance(bulletSpeed, b.transform); playerView.normalShoot(); }
+        if (tipoDisparo == TipoDisparo.sinuous) { advance = new SinuousAdvance(bulletSpeed, b.transform); playerView.sinuousShoot(); }
         b.SetType(advance);
        
         b.Subscribe(this);
@@ -93,40 +80,25 @@ public class Player : MonoBehaviour, IObserver
         {
             StopCoroutine(_shootCDCor);
         }
+        playerView.TargetHit();
+
 
         _canShoot = true;
-        CompletedFireCooldown();
-
+        completedFireCooldown();
+        playerView.Reload();
     }
 
-    //Setea cambios de la barra de CD del UI
-    void CompletedFireCooldown()
-    {
-        if (cooldownBar == null) return;
-        cooldownBar.color = Color.green;
-        cooldownBar.fillAmount = 1;
-    }
 
     IEnumerator ShootCooldown()
     {
         _canShoot = false;
-
-        float ticks = 0;
-
-        cooldownBar.color = Color.red;
-        cooldownBar.fillAmount = 0;
-
-        while (ticks < shootCooldown)
-        {
-            ticks += Time.deltaTime;
-            cooldownBar.fillAmount = ticks;
-            yield return null;
-        }
-
-        CompletedFireCooldown();
+        yield return fireCooldown(shootCooldown);
+        completedFireCooldown();
         _canShoot = true;
+        playerView.Reload();
+
     }
-    
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

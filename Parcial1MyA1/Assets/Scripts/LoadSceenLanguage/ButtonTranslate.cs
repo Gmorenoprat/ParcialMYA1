@@ -19,7 +19,7 @@ public class ButtonTranslate : MonoBehaviour
 
         if (!manager)
         {
-            manager = GameObject.Find("LanguageManager").GetComponent<LangManager>();
+            manager = GameObject.Find("LanguageManager").GetComponent<LangManager>().GetInstance;
         }
             
        manager.OnUpdate += ChangeLang;
@@ -35,5 +35,10 @@ public class ButtonTranslate : MonoBehaviour
     void ChangeLang()
     {
         myView.text = manager.GetTranslate(ID);
+    }
+
+    private void OnDestroy()
+    {
+        manager.OnUpdate -= ChangeLang;
     }
 }

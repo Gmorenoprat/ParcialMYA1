@@ -17,14 +17,17 @@ public class EnemySpawner : MonoBehaviour
 
     public ObjectPool<Enemy> pool;
 
-    void Awake()
+    public void Awake()
     {
         _instance = this;
 
         pool = new ObjectPool<Enemy>(EnemyFactory, Enemy.TurnOn, Enemy.TurnOff, enemyStock, true);
 
     }
-
+    private void Start()
+    {
+        
+    }
     public Enemy EnemyFactory()
     {
         Enemy e = Instantiate(enemyPrefab);

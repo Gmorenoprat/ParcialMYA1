@@ -39,6 +39,7 @@ public class RoundManager : MonoBehaviour, IObserver
         StartCoroutine(SpawnEnemies());
     }
 
+
     public void EnemyDead()
     {
         _totalEnemies--; //Murio un enemy
@@ -57,6 +58,7 @@ public class RoundManager : MonoBehaviour, IObserver
 
     IEnumerator SpawnEnemies()
     {
+
         _actualRound++; //Nueva ronda
 
         _totalEnemies = _enemigosASpawnearPrimerasDiezRondas.ReturnValue(_actualRound); ;// CalculateEnemiesToSpawn(_actualRound); //Total de enemigos a spawnear
@@ -67,16 +69,18 @@ public class RoundManager : MonoBehaviour, IObserver
         
         while (enemiesCont < enemiesToSpawn)
         {
+            //e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
+            //e.target = _target; //Le paso el target
+            // var e = Instantiate(enemyPrefab, _spawnPositions[posToSpawn].position, Quaternion.identity);  //Instancio enemy
+            
+            
             int posToSpawn = Random.Range(0, _spawnPositions.Length); //Posicion en la que va a spawnear
 
             Enemy e = EnemySpawner.Instance.pool.GetObject();
             e.transform.position = _spawnPositions[posToSpawn].position;
             e.transform.rotation = transform.rotation;
-            // var e = Instantiate(enemyPrefab, _spawnPositions[posToSpawn].position, Quaternion.identity);  //Instancio enemy
             e.setTarget(_target);
             e.setMananger(this);
-            //e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
-            //e.target = _target; //Le paso el target
 
             e.Subscribe(this);
 

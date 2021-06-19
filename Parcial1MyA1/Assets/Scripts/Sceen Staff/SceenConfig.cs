@@ -20,7 +20,7 @@ public class SceenConfig : MonoBehaviour
   {
 
         
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
             var s = Instantiate(Resources.Load<ScreenPause>("CanvasPause")); 
             _mgr.Push(s);

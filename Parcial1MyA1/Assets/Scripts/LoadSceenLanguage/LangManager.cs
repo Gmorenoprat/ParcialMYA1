@@ -25,7 +25,7 @@ public class LangManager : MonoBehaviour
     //Un evento para actualizar cuando se tiene que cambiar el texto
     public event Action OnUpdate = delegate { };
 
-    private static LangManager Instance;
+    public static LangManager Instance;
 
     //Bajamos el archivo de internet
     void Awake()
@@ -44,6 +44,11 @@ public class LangManager : MonoBehaviour
         }
     }
 
+    public LangManager GetInstance
+    {
+        get { return Instance; } 
+    }
+
     
     
     /// <summary>
@@ -53,10 +58,10 @@ public class LangManager : MonoBehaviour
     /// <returns></returns>
     public string GetTranslate(string _id)
     {
-        if (!LanguageManager[selectedLanguage].ContainsKey(_id))
+        if (!LanguageManager[Instance.selectedLanguage].ContainsKey(_id))
             return "Error 404: Not Found";
         else
-            return LanguageManager[selectedLanguage][_id];
+            return LanguageManager[Instance.selectedLanguage][_id];
     }
 
     /// <summary>
@@ -73,17 +78,17 @@ public class LangManager : MonoBehaviour
 
         LanguageManager = LanguageU.loadCodexFromString("www", www.downloadHandler.text);
 
-        OnUpdate();
+        Instance.OnUpdate();
     }
 
     public void ChangeLanguage()
     {
-        if (selectedLanguage == Language.eng)
-            selectedLanguage = Language.spa;
+        if (Instance.selectedLanguage == Language.eng)
+            Instance.selectedLanguage = Language.spa;
         else
-            selectedLanguage = Language.eng;
+            Instance.selectedLanguage = Language.eng;
 
-        OnUpdate();
+        Instance.OnUpdate();
     }
 
 

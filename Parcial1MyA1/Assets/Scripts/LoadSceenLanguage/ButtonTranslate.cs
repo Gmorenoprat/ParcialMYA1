@@ -13,7 +13,8 @@ public class ButtonTranslate : MonoBehaviour
 
     string _myText = "";
 
-    void Awake()
+
+    private void Start()
     {
         _myText = myView.GetComponent<Text>().text;
 
@@ -21,12 +22,8 @@ public class ButtonTranslate : MonoBehaviour
         {
             manager = GameObject.Find("LanguageManager").GetComponent<LangManager>().GetInstance;
         }
-            
-       manager.OnUpdate += ChangeLang;
-        
-    }
-    private void Start()
-    {
+
+        manager.OnUpdate += ChangeLang;
         try { ChangeLang(); }
         catch { return; }
     }

@@ -44,11 +44,11 @@ public class ScreenManag : MonoBehaviour
         return true;
     }
 
-    public void Push(string resource)
-    {
-        var go = Instantiate(Resources.Load<GameObject>(resource));
+    //public void Push(string resource)
+    //{
+    //    var go = Instantiate(Resources.Load<GameObject>(resource));
 
-        Push(go.GetComponent<IScreen>());
+    //    Push(go.GetComponent<IScreen>());
 
-    }
+    //}
 }

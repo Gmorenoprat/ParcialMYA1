@@ -21,7 +21,6 @@ public class ScreenGO : IScreen
         foreach (var keyvalue in _before)
         {
             keyvalue.Key.enabled = keyvalue.Value;
-           
         }
 
         _before.Clear();
@@ -33,7 +32,7 @@ public class ScreenGO : IScreen
         {
             _before[b] = b.enabled;
             b.enabled = false;
-}
+        }
     }
 
     public string Free()

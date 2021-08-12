@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,11 +21,15 @@ public class PlayerView
         _cooldownBar.fillAmount = 1;
     }
 
-    public IEnumerator FireCooldown(float cooldown) {
+
+    public IEnumerator FireCooldown(float cooldown, Func<bool> isPaused) {
         float ticks = 0;
         _cooldownBar.color = Color.red;
         _cooldownBar.fillAmount = 0;
-        while(ticks < cooldown) { 
+        while(ticks < cooldown) {
+
+            yield return new WaitUntil(isPaused); //nice workaround
+
             ticks += Time.deltaTime;
             _cooldownBar.fillAmount = ticks;
             yield return null;

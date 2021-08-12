@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour , IObservable
 {
-    //public float speed;
     public Transform target;
 
     public RoundManager manager;
@@ -24,8 +23,6 @@ public class Enemy : MonoBehaviour , IObservable
         return this;
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if (!target) return; //Si no hay target no hago nada
@@ -42,10 +39,9 @@ public class Enemy : MonoBehaviour , IObservable
     public void GetShot()
     {
         NotifyToObservers("EnemyDestroyed");
-        //manager.EnemyDead(); //Le digo al manager que mori
         EnemySpawner.Instance.ReturnEnemy(this);
-        //Destroy(gameObject); //Me destruyo
     }
+
     #region POOL
     //Funcion para agarrar una bullet del pool
     public static void TurnOn(Enemy e)
@@ -61,7 +57,7 @@ public class Enemy : MonoBehaviour , IObservable
 
     #endregion
 
-    #region IOBServable
+    #region IObservable
     public void Subscribe(IObserver obs)
     {
         if (!_allObserver.Contains(obs))

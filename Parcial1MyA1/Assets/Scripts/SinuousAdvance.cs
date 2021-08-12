@@ -9,11 +9,8 @@ public class SinuousAdvance : IAdvance
     float _magnitud = 0.04f;
     Transform _xf;
 
-    public SinuousAdvance(float speed, Transform transform)
-    {
-        _speed = speed;
-        _xf = transform;
-    }
+    public float SetSpeed { set { _speed = value; } }
+    public Transform SetTransform { set { _xf = value; } }
 
     public void Advance()
     {

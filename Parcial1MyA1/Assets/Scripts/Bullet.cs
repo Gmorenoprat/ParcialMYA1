@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour, IObservable
     //Lista donde guardo todos los IObservers 
     List<IObserver> _allObserver;
 
-
+    public float Speed { get { return _speed;}}
     public Bullet SetType(IAdvance advance)
     {
         _movementType = advance;

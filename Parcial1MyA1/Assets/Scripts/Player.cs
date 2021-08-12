@@ -30,10 +30,6 @@ public class Player : MonoBehaviour, IObserver
     //Strategy
     public IAdvance advance;
 
-    public enum TipoDisparo{
-        normal = 0,
-        sinuous = 1,
-    }
     public bool boolIsPaused()
     {
         return this.enabled;
@@ -82,15 +78,16 @@ public class Player : MonoBehaviour, IObserver
     #endregion
 
     #region BATTLE
-    public void Shoot(TipoDisparo tipoDisparo)
+    public void Shoot(IAdvance tipoDisparo)
     {
         Bullet b = BulletSpawner.Instance.pool.GetObject().SetSpeed(bulletSpeed).SetTimeToDie(shootCooldown).SetOwner(this);
         b.transform.position = pointToSpawn.position;
         b.transform.rotation = transform.rotation;
 
-        //Strategy?
-        if (tipoDisparo == TipoDisparo.normal)  { advance = new NormalAdvance(bulletSpeed, b.transform); playerView.normalShoot(); }
-        else if (tipoDisparo == TipoDisparo.sinuous) { advance = new SinuousAdvance(bulletSpeed, b.transform); playerView.sinuousShoot(); }
+        advance = tipoDisparo;
+        advance.SetTransform = b.transform;
+        advance.SetSpeed= b.Speed;
+
         b.SetType(advance);
        
         b.Subscribe(this);
@@ -98,14 +95,22 @@ public class Player : MonoBehaviour, IObserver
         _shootCDCor = StartCoroutine(ShootCooldown());  //Corrutina del cooldown para volver a disparar
         
     }
+    internal void ShootNormal()
+    {
+        if (_canShoot)
+        {
+            playerView.normalShoot();
+            Shoot(new NormalAdvance());
+        }
+    }
 
     internal void ShootSinuous()
     {
-        if (_canShoot) Shoot(Player.TipoDisparo.sinuous);
-    }
-    internal void ShootNormal()
-    {
-        if (_canShoot) Shoot(Player.TipoDisparo.normal);
+        if (_canShoot)
+        {
+            playerView.sinuousShoot();
+            Shoot(new SinuousAdvance());
+        }
     }
 
     //Funcion para cuando la bala toca un enemigo

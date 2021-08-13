@@ -79,11 +79,7 @@ public class RoundManager : MonoBehaviour, IObserver
         
         while (enemiesCont < enemiesToSpawn)
         {
-            //e.manager = this; //Le paso el manager para que al morir le avise que reduza uno en _totalEnemies
-            //e.target = _target; //Le paso el target
-            // var e = Instantiate(enemyPrefab, _spawnPositions[posToSpawn].position, Quaternion.identity);  //Instancio enemy
-            
-            
+           
             int posToSpawn = Random.Range(0, _spawnPositions.Length); //Posicion en la que va a spawnear
 
             yield return new WaitUntil(isPaused); //nice workaround

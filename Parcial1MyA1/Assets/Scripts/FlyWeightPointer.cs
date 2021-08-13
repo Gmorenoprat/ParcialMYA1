@@ -2,7 +2,7 @@
 {
     public static readonly FlyWeight Asteroid = new FlyWeight
     {
-        speed = 3
+        speed = 2
     };
     public static readonly FlyWeight MiniAsteroid = new FlyWeight
     {

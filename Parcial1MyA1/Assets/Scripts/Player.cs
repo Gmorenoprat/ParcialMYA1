@@ -43,7 +43,6 @@ public class Player : MonoBehaviour, IObserver
 
         _myCamera = Camera.main;
         _canShoot = true;
-        completedFireCooldown();
 
         EventManager.SubscribeToEvent(EventManager.EventsType.Event_BulletHit, TargetHit);
         playerView = new PlayerView(cooldownBar, audios);
@@ -62,7 +61,6 @@ public class Player : MonoBehaviour, IObserver
         if (collision.GetComponent<Enemy>())
         {
             //to-enhace: crear y exportar a SceneController
-           
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
     }

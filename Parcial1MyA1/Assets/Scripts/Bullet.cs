@@ -49,7 +49,6 @@ public class Bullet : MonoBehaviour, IObservable
         //Movimiento
         if (_movementType != null)
             _movementType.Advance();
-        //transform.position += transform.right * speed * Time.deltaTime;
 
         //Lifetime
         _timeToDie -= Time.deltaTime;
@@ -57,7 +56,6 @@ public class Bullet : MonoBehaviour, IObservable
         if (_timeToDie <= 0)
         {
             BulletSpawner.Instance.ReturnBullet(this);
-            //Destroy(this.gameObject);
         }
     }
 

@@ -2,14 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour , IObservable
+public class Enemy : MonoBehaviour , IObservable, IPrototype
 {
     public Transform target;
-
+    private float _speed = FlyWeightPointer.Asteroid.speed;
+    
     public RoundManager manager;
+
+    protected bool isClone = false;
 
     List<IObserver> _allObserver = new List<IObserver>();
 
+    public Enemy setScale(float Multiplier)
+    {
+        this.transform.localScale = this.transform.localScale * Multiplier;
+        return this;
+    }
+
+    public Enemy setSpeed(float speed)
+    {
+        this._speed = speed;
+        return this;
+    }
 
     public Enemy setTarget(Transform target)
     {
@@ -32,12 +46,13 @@ public class Enemy : MonoBehaviour , IObservable
         dir.z = target.position.z;
         dir.Normalize();
 
-        //FLYWEIGHT
-        transform.position += dir * FlyWeightPointer.Asteroid.speed * Time.deltaTime;
+        
+        transform.position += dir * _speed * Time.deltaTime;
     }
 
-    public void GetShot()
+    public virtual void GetShot()
     {
+        
         NotifyToObservers("EnemyDestroyed");
         EnemySpawner.Instance.ReturnEnemy(this);
     }
@@ -82,4 +97,19 @@ public class Enemy : MonoBehaviour , IObservable
         }
     }
     #endregion
+
+
+    public IPrototype Clone()
+    {
+       
+        Enemy e = Instantiate(this);
+        e.transform.position = this.transform.position;
+        e.transform.position = e.transform.position + new Vector3(Random.Range(0, 3), Random.Range(0, 3),0);
+        e.setSpeed(FlyWeightPointer.MiniAsteroid.speed);
+        e.setTarget(FindObjectOfType<Player>().transform);
+        e.setScale(0.5f);
+        return e;
+        
+    }
+    
 }

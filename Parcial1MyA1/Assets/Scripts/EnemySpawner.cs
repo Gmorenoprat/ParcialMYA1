@@ -11,7 +11,7 @@ public class EnemySpawner : MonoBehaviour
 
     static EnemySpawner _instance;
 
-    public Enemy enemyPrefab;
+    public Enemy[] enemyPrefab;
     public int enemyStock = 5;
 
 
@@ -24,13 +24,10 @@ public class EnemySpawner : MonoBehaviour
         pool = new ObjectPool<Enemy>(EnemyFactory, Enemy.TurnOn, Enemy.TurnOff, enemyStock, true);
 
     }
-    private void Start()
-    {
-        
-    }
+    
     public Enemy EnemyFactory()
     {
-        Enemy e = Instantiate(enemyPrefab);
+        Enemy e = Instantiate(enemyPrefab[Random.Range(0,enemyPrefab.Length)]);
         e.transform.parent = this.transform;
         return e;
     }

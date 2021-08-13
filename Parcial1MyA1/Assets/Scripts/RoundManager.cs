@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RoundManager : MonoBehaviour, IObserver
 {
-    public Enemy enemyPrefab; 
+   
 
     public Transform spawnPoints;
 

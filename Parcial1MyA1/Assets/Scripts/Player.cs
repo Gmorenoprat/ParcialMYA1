@@ -62,6 +62,7 @@ public class Player : MonoBehaviour, IObserver
         if (collision.GetComponent<Enemy>())
         {
             //to-enhace: crear y exportar a SceneController
+           
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
     }

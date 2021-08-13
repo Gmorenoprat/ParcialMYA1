@@ -1,0 +1,24 @@
+CORRECIONES PARCIAL 1:
+
+* Pool - Factory: Está bien, el único detalle es que el factory de enemigos tendría que estar aislado como el de bullets, de modo que no se necesite la presencia del objeto EnemySpawnManager para que exista.
+
+* Observer: En el caso del player está a medias, ya que se suscribe y la bala avisa por notify pero cuando llega al player se ejecuta un triggerEvent, o sea se está mezclando observer y eventmanager.
+
+* Look Up Table: Está bien hecho pero no lo están utilizando: _totalEnemies = CalculateEnemiesToSpawn(_actualRound);
+
+* Builder: Está bien, como detalle se podría haber hecho uso de la facilidad que brinda Builder y hacer todo en la misma línea e.setTarget(_target).setMananger(this); Y de paso generar más builders para la posición y demas (igual son detalles, casi nadie lo hizo je)
+
+* Strategy: La generacion del IAdvance tiene que estar en el player y pasarle esa creación por parámetro. De esta manera se ahorra el tener que crear las variables en la bala (si hubiera muchas balas estaríamos teniendo muchas variables para solo un movimiento). La mejor opción es guardar en un Func<object[], IAdvance> la creación para el tipo de movimiento elegido, por ejemplo si toque el 1 se guardaria en el func new LinearAdvance(*la variable object[]*), de esta manera pasaría en el builder de la clase datos como velocidad, transform, etc., y como hago un new estaría devolviendo un IAdvance cumpliendo con la firma del Func. 
+
+
+CORRECIONES PARCIAL 2:
+
+* El pause no funciona con el CD del disparo, puedo disparar, pausear, despausear y volver  disparar
+
+* El strategy esta bien, pero la utilizacion del enum lo termina haciendo mas enredado a la larga si hubiera mas disparos. Se tendria que buscar una alternativa mas funcional (delegates)
+
+* Utilicen los else if, porque si entra en un if y luego utilizan otro if en vez del else if hacen que se tenga que procesar otra condicion en la que ya de por si no va a entrar por haber entrado en la anteriot (por ejemplo al preguntar que movimiento esta seleccionado)
+
+* El model solo tiene que tener la referencia para pasarselo al Controller, sin embargo ustedes lo llaman directamente para ejecutar sus funciones.
+
+

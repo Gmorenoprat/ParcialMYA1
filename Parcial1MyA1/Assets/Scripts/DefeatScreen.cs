@@ -7,10 +7,11 @@ public class DefeatScreen : MonoBehaviour
 {
     public Text timeText;
 
+    public Text scoreFinal;
 
-    // Start is called before the first frame update
     void Start()
     {
+        scoreFinal.text = ScoreMananger.Instance.score.ToString();
         StartCoroutine(Countdown());
     }
 

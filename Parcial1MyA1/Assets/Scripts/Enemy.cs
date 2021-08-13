@@ -1,17 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Enemy : MonoBehaviour , IObservable
 {
     public Transform target;
     private float _speed = FlyWeightPointer.Asteroid.speed;
+    protected int _score = FlyWeightPointer.Asteroid.score;
     
     public RoundManager manager;
 
 
+    public event Action<int> onDie;
+
+
     List<IObserver> _allObserver = new List<IObserver>();
 
+
+    void Start()
+    {
+        onDie = ScoreMananger.Instance.SumarScore;
+    }
     #region Builders
     public Enemy setScale(float Multiplier)
     {
@@ -24,7 +34,11 @@ public class Enemy : MonoBehaviour , IObservable
         this._speed = speed;
         return this;
     }
-
+    public Enemy setScore(int score)
+    {
+        this._score = score;
+        return this;
+    }
     public Enemy setTarget(Transform target)
     {
         this.target = target;
@@ -53,6 +67,7 @@ public class Enemy : MonoBehaviour , IObservable
     public virtual void GetShot()
     {
         NotifyToObservers("EnemyDestroyed");
+        onDie(_score);
         EnemySpawner.Instance.ReturnEnemy(this);
     }
 

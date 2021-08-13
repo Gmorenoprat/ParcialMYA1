@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DivEnemy : Enemy, IPrototype
 {
     bool _cloned = false;
+    float _scaleMuliplier = 0.5f;
+    float _distanceToClone = 1.5f;
     bool wasCloned { set { _cloned = value; } }
 
     public int cantClones = 2;
@@ -18,8 +18,10 @@ public class DivEnemy : Enemy, IPrototype
                 Clone();
             }
         }
-        NotifyToObservers("EnemyDestroyed");
-        Destroy(this.gameObject);
+
+        wasCloned = false;
+        Reset();
+        base.GetShot();
     }
 
     public IPrototype Clone()
@@ -28,13 +30,20 @@ public class DivEnemy : Enemy, IPrototype
         DivEnemy e = (DivEnemy) Instantiate(this)
             .setSpeed(FlyWeightPointer.MiniAsteroid.speed)
             .setTarget(FindObjectOfType<Player>().transform)
-            .setScale(0.5f);
+            .setScale(_scaleMuliplier)
+            .setScore(FlyWeightPointer.MiniAsteroid.score);
 
         e.transform.position = this.transform.position;
-        e.transform.position = e.transform.position + new Vector3(Random.Range(0, 1.5f), Random.Range(0, 1.5f), 0);
+        e.transform.position = e.transform.position + new Vector3(Random.Range(0, _distanceToClone), Random.Range(0, _distanceToClone), 0);
 
         e.wasCloned = true;
 
         return e;
+    }
+
+    public void Reset()
+    {
+        this.transform.localScale = new Vector3(1, 1, 1);
+        this.setSpeed(FlyWeightPointer.Asteroid.speed).setScore(FlyWeightPointer.Asteroid.score);
     }
 }

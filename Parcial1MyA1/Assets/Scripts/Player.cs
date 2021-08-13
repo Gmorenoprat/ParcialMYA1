@@ -21,11 +21,10 @@ public class Player : MonoBehaviour, IObserver
 
     public AudioSource[] audios;
 
-    public event Func<float, Func<bool>, IEnumerator> fireCooldown;// = delegate { };
+    public event Func<float, Func<bool>, IEnumerator> fireCooldown;
     public event Action completedFireCooldown = delegate { };
 
     public Func<bool> isPaused;
-
 
     //Strategy
     public IAdvance advance;
@@ -35,8 +34,6 @@ public class Player : MonoBehaviour, IObserver
         return this.enabled;
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         isPaused = boolIsPaused;
@@ -120,7 +117,6 @@ public class Player : MonoBehaviour, IObserver
             StopCoroutine(_shootCDCor);
         }
         playerView.TargetHit();
-
 
         _canShoot = true;
         completedFireCooldown();

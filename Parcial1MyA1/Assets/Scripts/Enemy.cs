@@ -71,6 +71,7 @@ public class Enemy : MonoBehaviour , IObservable
         EnemySpawner.Instance.ReturnEnemy(this);
     }
 
+
     #region POOL
     //Funcion para agarrar una bullet del pool
     public static void TurnOn(Enemy e)

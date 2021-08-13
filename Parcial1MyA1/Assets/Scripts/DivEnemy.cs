@@ -38,6 +38,9 @@ public class DivEnemy : Enemy, IPrototype
 
         e.wasCloned = true;
 
+        e.transform.parent = EnemySpawner.Instance.transform;
+
+
         return e;
     }
 
